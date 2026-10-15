@@ -16,6 +16,7 @@ export class Input {
     this._touchJump = false;
     this._touchPunch = false;
     this._touchKick = false;
+    this._touchSpecial = false;
     this._touchBlock = false;
     this._onDown = (e) => {
       e.preventDefault();
@@ -82,7 +83,7 @@ export class Input {
     const sp = this.keys.has('space');
     this._edgePunch = (z && !this._zPrev) || this._touchPunch;
     this._edgeKick = (x && !this._xPrev) || this._touchKick;
-    this._edgeSpecial = c && !this._cPrev;
+    this._edgeSpecial = (c && !this._cPrev) || this._touchSpecial;
     this._edgeJump = (sp && !this._spacePrev) || this._touchJump;
     this._zPrev = z;
     this._xPrev = x;
@@ -106,6 +107,7 @@ export class Input {
   endFrame() {
     this._touchPunch = false;
     this._touchKick = false;
+    this._touchSpecial = false;
     this._touchJump = false;
   }
 
@@ -143,6 +145,11 @@ export class Input {
     bind(
       root.querySelector('[data-fc="kick"]'),
       () => (this._touchKick = true),
+      () => {}
+    );
+    bind(
+      root.querySelector('[data-fc="special"]'),
+      () => (this._touchSpecial = true),
       () => {}
     );
     const blockEl = root.querySelector('[data-fc="block"]');
